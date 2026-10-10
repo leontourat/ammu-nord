@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Ammu-Nation Nord, armurerie à San Andreas." name="description"/>
+<title>Réservations | Ammu-Nation Nord</title>
+<link href="assets/css/style.css" rel="stylesheet"/>
+<script defer="" src="assets/js/config.js">
+</script>
+<script defer="" src="assets/js/app.js">
+</script>
+</head>
+<body data-page="reservations">
+<div id="header">
+</div>
+<main>
+<div class="container">
+<div class="page-head">
+<h1>Réservations</h1>
+<p class="muted">Demandez votre rendez-vous ou réservez une activité.</p>
+</div><section class="panel reservation-panel"><h2>Demander une réservation</h2><p class="muted">Complète le formulaire. Une demande n'est pas une confirmation de réservation.</p><form id="reservation-form"><div class="two"><div class="field"><label for="r-last">Nom *</label><input autocomplete="family-name" id="r-last" maxlength="100" required=""/></div><div class="field"><label for="r-first">Prénom *</label><input autocomplete="given-name" id="r-first" maxlength="100" required=""/></div><div class="field"><label for="r-phone">Numéro de téléphone *</label><input autocomplete="tel" id="r-phone" maxlength="25" required="" type="tel"/></div><div class="field"><label for="r-birth">Date de naissance *</label><input id="r-birth" required="" type="date"/></div><div class="field"><label for="r-date">Date et heure souhaitées *</label><input id="r-date" required="" type="datetime-local"/></div><div class="field"><label for="r-count">Nombre de personnes *</label><input id="r-count" max="30" min="1" required="" type="number" value="1"/></div></div><div class="field"><label for="r-type">Que souhaitez-vous réserver ? *</label><select id="r-type" required=""><option value="">Choisir une prestation</option><option>Rendez-vous PPA</option><option>CQB</option><option>Stand de tir</option><option>PPA de chasse</option></select></div><button class="btn" type="submit">Envoyer ma demande</button><p aria-live="polite" id="reservation-status" role="status"></p></form></section>
+
+<div id="status">
+</div>
+
+
+</div>
+</main>
+<div id="footer">
+</div>
+</body>
+</html>

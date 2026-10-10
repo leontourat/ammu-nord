@@ -1,40 +1,44 @@
 <!DOCTYPE html>
+
 <html lang="fr">
- <head>
+<head>
 <meta charset="utf-8"/>
-  <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <meta content="Ammu-Nation Nord, armurerie à San Andreas." name="description"/>
-  <title>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Ammu-Nation Nord, armurerie à San Andreas." name="description"/>
+<title>
    Événements | Ammu-Nation Nord
   </title>
-  <link href="assets/css/style.css" rel="stylesheet"/>
-  <script defer="" src="assets/js/config.js">
-  </script>
-  <script defer="" src="assets/js/app.js">
-  </script>
- </head>
- <body data-page="news">
-  <div id="header">
-  </div>
-  <main>
-   <div class="container">
-    <div class="page-head">
-     <h1>
+<link href="assets/css/style.css" rel="stylesheet"/>
+<script defer="" src="assets/js/config.js">
+</script>
+<script defer="" src="assets/js/app.js">
+</script>
+</head>
+<body data-page="news">
+<div id="header">
+</div>
+<main>
+<div class="container">
+<div class="page-head">
+<h1>
       Événements
      </h1>
-     <p class="muted">
-      Arrivages, événements et annonces du concessionnaire.
-     </p>
-    </div>
-    <div id="status">
-    </div>
-    <div class="grid" id="news-grid">
-    </div>
-    <div id="article-view" style="margin-top:25px">
-    </div>
-   </div>
-  </main>
-  <div id="footer">
-  </div>
- </body>
+<p class="muted">Retrouvez nos événements et consultez le calendrier.</p>
+</div>
+<section aria-label="Calendrier des événements" class="panel calendar-panel"><div class="calendar-toolbar"><button aria-label="Mois précédent" class="btn outline small" id="cal-prev" type="button">←</button><h2 id="cal-month">Calendrier</h2><button aria-label="Mois suivant" class="btn outline small" id="cal-next" type="button">→</button></div><div class="calendar-weekdays"><span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span></div><div class="calendar-days" id="cal-days"></div></section>
+
+<div id="status">
+</div>
+</div>
+</main>
+<div id="event-modal" class="event-modal" role="dialog" aria-modal="true" aria-label="Détails de l’événement" aria-hidden="true" hidden>
+  <div class="event-modal-backdrop" data-event-close></div>
+  <article class="event-modal-card" role="document">
+    <button type="button" class="event-modal-close" id="event-modal-close" aria-label="Fermer">×</button>
+    <div id="event-modal-content"></div>
+  </article>
+</div>
+<div id="footer">
+</div>
+</body>
 </html>

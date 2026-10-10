@@ -28,7 +28,7 @@ function applyAppearance(){
  if(logo){ $$(".brand,.footer-brand").forEach(el=>{el.textContent="";const image=document.createElement("img");image.src=logo;image.alt="Ammu-Nation Nord";image.className="brand-image";el.append(image);}); }
  const hero=siteImage(siteSettings.site_hero_image);
  if(hero && $(".hero")) $(".hero").style.backgroundImage=`linear-gradient(90deg,rgba(2,2,3,.96),rgba(36,0,9,.38)),url("${hero.replace(/\"/g,"%22")}")`;
- const banners={catalogue:"site_catalogue_image",news:"site_news_image",association:"site_association_image",equipe:"site_team_image",contact:"site_contact_image"};
+ const banners={catalogue:"site_catalogue_image",news:"site_news_image",reservations:"site_news_image",association:"site_association_image",equipe:"site_team_image",contact:"site_contact_image"};
  const bannerKey=banners[page];
  const banner=$('.page-head');
  if(banner && bannerKey){
@@ -46,7 +46,7 @@ function applyAppearance(){
 function cropStyle(v){const x=Math.max(0,Math.min(100,Number(v.crop_x??50)||0));const y=Math.max(0,Math.min(100,Number(v.crop_y??50)||0));const z=Math.max(.5,Math.min(3,Number(v.crop_zoom??1)||1));return `transform:translate(${x-50}%,${y-50}%) scale(${z});object-position:center` ;}
 function layout(){
  const current=(location.pathname.split('/').pop()||'index.html');
- const links=[['index.html','Accueil'],['catalogue.html','Catalogue'],['actualites.html','Événements'],['equipe.html','Notre équipe'],['association.html','Association'],['contact.html','Contact'],['admin.html','Administration']];
+ const links=[['index.html','Accueil'],['catalogue.html','Catalogue'],['actualites.html','Événements'],['reservations.html','Réservations'],['equipe.html','Notre équipe'],['association.html','Association'],['contact.html','Contact'],['admin.html','Administration']];
  const menu=links.map(([href,label])=>`<a href="${href}" class="${current===href?'is-active':''} ${href==='admin.html'?'nav-admin':''}" ${current===href?'aria-current="page"':''}>${label}</a>`).join('');
  $("#header").innerHTML=`<header class="site-header"><div class="container nav"><a class="brand" href="index.html">AMMU-<span>NATION NORD</span></a><button type="button" class="mobile-menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="site-navigation"><span></span><span></span><span></span></button><nav id="site-navigation" class="nav-links" aria-label="Navigation principale">${menu}</nav></div></header>`;
  const menuButton=document.querySelector('.mobile-menu-toggle');
@@ -61,7 +61,7 @@ function layout(){
 
 
  const target=$("#footer");
- const html=`<footer class="site-footer"><div class="container footer-content"><div class="footer-identity"><a class="footer-brand" href="index.html">AMMU-NATION NORD</a><p>Votre armurerie à San Andreas.</p></div><nav class="footer-links" aria-label="Navigation de pied de page"><a href="index.html">Accueil</a><a href="catalogue.html">Catalogue</a><a href="actualites.html">Événements</a></nav></div><div class="container footer-bottom"><span>© ${new Date().getFullYear()} Ammu-Nation Nord. Tous droits réservés.</span><span>San Andreas · Armurerie</span></div></footer>`;
+ const html=`<footer class="site-footer"><div class="container footer-content"><div class="footer-identity"><a class="footer-brand" href="index.html">AMMU-NATION NORD</a><p>Votre armurerie à San Andreas.</p></div><nav class="footer-links" aria-label="Navigation de pied de page"><a href="index.html">Accueil</a><a href="catalogue.html">Catalogue</a><a href="actualites.html">Événements</a><a href="reservations.html">Réservations</a></nav></div><div class="container footer-bottom"><span>© ${new Date().getFullYear()} Ammu-Nation Nord. Tous droits réservés.</span><span>San Andreas · Armurerie</span></div></footer>`;
  if(target)target.innerHTML=html;
  else document.body.insertAdjacentHTML('beforeend',html);
 }
@@ -187,6 +187,7 @@ async function publicPage(){
   $("#reset-filters").onclick=()=>{ids.forEach(id=>$("#"+id).value="");render();};
   render();
  }
+ if(page==="reservations"){initPublicReservation();}
  if(page==="vehicle"){
   const id=Number(new URLSearchParams(location.search).get("id"));
   const v=(await api("/api/vehicles")).find(x=>x.id===id);
@@ -194,9 +195,53 @@ async function publicPage(){
   $("#detail").innerHTML=`<div class="panel"><img class="detail-image crop-render" style="${cropStyle(v)}" src="${esc(img(v.image_url))}" alt="${esc(v.brand+" "+v.model)}"></div><div class="panel"><span class="eyebrow">${esc(v.category)}</span><h1>${esc(v.brand)} ${esc(v.model)}</h1><h2>${money(v.price)}</h2><p style="white-space:pre-wrap">${esc(v.description)}</p></div>`;
  }
  if(page==="news"){
-  const n=await api("/api/news");$("#news-grid").innerHTML=n.map(newsCard).join("")||"<p>Pas encore d'événements.</p>";
+  const n=await api("/api/news");initEventCalendar(n);
  }
 
+}
+function initEventCalendar(events){
+ const today=new Date(),view=new Date(today.getFullYear(),today.getMonth(),1);
+ const dated=events.filter(e=>/^\d{4}-\d{2}-\d{2}/.test(e.event_date||""));
+ const modal=$("#event-modal"),modalContent=$("#event-modal-content");let lastFocus=null;
+ function closeModal(){if(!modal)return;modal.hidden=true;modal.setAttribute("aria-hidden","true");document.body.classList.remove("event-modal-open");if(lastFocus&&lastFocus.isConnected)lastFocus.focus();}
+ function openModal(event){if(!modal)return;lastFocus=document.activeElement;
+  const rawDate=(event.event_date||"").slice(0,10),time=(event.event_time||event.event_date?.slice(11,16)||"").slice(0,5);
+  const prettyDate=rawDate?new Date(rawDate+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}).toUpperCase():"";
+  modalContent.innerHTML=`${siteImage(event.image_url)?`<img class="event-modal-image" src="${esc(event.image_url)}" alt="Affiche de ${esc(event.title)}">`:""}<div class="event-modal-body"><div class="event-modal-date">${esc(prettyDate)}${time?" · "+esc(time):""}</div><h2>${esc(event.title)}</h2><p>${esc(event.content||"")}</p></div>`;
+  modal.hidden=false;modal.setAttribute("aria-hidden","false");document.body.classList.add("event-modal-open");$("#event-modal-close").focus();
+ }
+ modal?.addEventListener("click",e=>{if(e.target.closest("[data-event-close],#event-modal-close"))closeModal();});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!modal?.hidden)closeModal();});
+ const render=()=>{
+  $("#cal-month").textContent=view.toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+  const first=(view.getDay()+6)%7,total=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+  const count=Math.ceil((first+total)/7)*7;let html="";
+  for(let i=0;i<count;i++){
+   const d=i-first+1,valid=d>=1&&d<=total,cellDate=new Date(view.getFullYear(),view.getMonth(),d);
+   const date=[cellDate.getFullYear(),String(cellDate.getMonth()+1).padStart(2,"0"),String(cellDate.getDate()).padStart(2,"0")].join("-");
+   const dayEvents=valid?dated.filter(e=>e.event_date.slice(0,10)===date):[];
+   const cards=dayEvents.map(e=>`<button type="button" class="calendar-event-mini" data-event-id="${esc(String(e.id))}" aria-label="Voir ${esc(e.title)}">${siteImage(e.image_url)?`<img src="${esc(e.image_url)}" loading="lazy" alt="">`:""}<strong>${esc(e.title)}</strong><small>${esc((e.event_time||e.event_date?.slice(11,16)||"").slice(0,5))}</small></button>`).join("");
+   html+=`<div class="calendar-day ${valid?'':'calendar-outside'} ${dayEvents.length?'has-event':''}"><span class="calendar-day-number">${cellDate.getDate()}</span>${cards}</div>`;
+  }
+  $("#cal-days").innerHTML=html;
+ };
+ $("#cal-prev").onclick=()=>{view.setMonth(view.getMonth()-1);render();};
+ $("#cal-next").onclick=()=>{view.setMonth(view.getMonth()+1);render();};
+ $("#cal-days").addEventListener("click",e=>{const btn=e.target.closest("[data-event-id]");if(!btn)return;const ev=dated.find(x=>String(x.id)===btn.dataset.eventId);if(ev)openModal(ev);});
+ render();
+}
+function initPublicReservation(){
+ const form=$("#reservation-form");if(!form)return;
+ const date=$("#r-date");const now=new Date();now.setMinutes(now.getMinutes()-now.getTimezoneOffset());date.min=now.toISOString().slice(0,16);
+ $("#r-birth").max=new Date().toISOString().slice(0,10);
+ form.onsubmit=async e=>{e.preventDefault();const btn=form.querySelector('button[type=submit]');btn.disabled=true;
+  try{await api('/api/reservations',{method:'POST',body:{first_name:$("#r-first").value,last_name:$("#r-last").value,phone:$("#r-phone").value,birth_date:$("#r-birth").value,reservation_at:date.value,party_size:Number($("#r-count").value),reservation_type:$("#r-type").value}});form.reset();$("#reservation-status").textContent='Demande envoyée ! Elle reste en attente de confirmation.';}
+  catch(err){$("#reservation-status").textContent=err.message;}finally{btn.disabled=false;}
+ };
+}
+async function loadReservations(){const target=$("#admin-reservations");if(!target)return;
+ try{const rows=await api('/api/admin/reservations',{auth:true});target.innerHTML=rows.length?rows.map(r=>`<article class="booking-row"><div><strong>${esc(r.first_name)} ${esc(r.last_name)}</strong><p>${esc(r.reservation_type)} · ${esc(r.reservation_at.replace('T',' '))} · ${r.party_size} personne(s)</p><p>Tél. ${esc(r.phone)} · Né(e) le ${esc(r.birth_date)}</p><span class="booking-status">${r.status==='confirmed'?'Confirmée':r.status==='cancelled'?'Refusée':'En attente'}</span></div><div class="booking-actions"><button class="btn small" data-book-status="confirmed" data-book-id="${r.id}">Confirmer</button><button class="btn outline small" data-book-status="cancelled" data-book-id="${r.id}">Refuser</button><button class="btn outline small" data-book-delete="${r.id}">Supprimer</button></div></article>`).join(''):'<p class="muted">Aucune demande de réservation.</p>';}
+ catch(err){target.textContent=err.message;}
 }
 function setLogged(logged){$("#login-panel").classList.toggle("hidden",logged);$("#admin-panel").classList.toggle("hidden",!logged);}
 function adminRows(){
@@ -261,7 +306,7 @@ async function adminPage(){
   const result=await api("/api/admin/login",{method:"POST",body:{code:$("#admin-code").value}});
   sessionStorage.setItem("ammu_admin_token",result.token);$("#admin-code").value="";
   setLogged(true);notice("");refreshAppearanceForm();
-  await Promise.allSettled([refreshAdmin(),loadAssociationEditor(),loadTeamEditor()]);
+  await Promise.allSettled([refreshAdmin(),loadAssociationEditor(),loadTeamEditor(),loadReservations()]);
  }catch(err){notice(err.message,true);}};
  $("#logout").onclick=async()=>{try{await api("/api/admin/logout",{method:"POST",auth:true});}catch{}sessionStorage.removeItem("ammu_admin_token");setLogged(false);notice("Déconnecté.");};
  
@@ -310,7 +355,7 @@ async function adminPage(){
  }
  adminTabs.forEach((b,i)=>{b.onclick=()=>activateAdminTab(b.dataset.tab);b.onkeydown=e=>{if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;e.preventDefault();const next=adminTabs[(i+(e.key==="ArrowRight"?1:-1)+adminTabs.length)%adminTabs.length];activateAdminTab(next.dataset.tab);next.focus();};});
  activateAdminTab(sessionStorage.getItem("ammu_admin_tab")||"vehicles");
- if(token()){try{await api("/api/admin/me",{auth:true});setLogged(true);refreshAppearanceForm();await Promise.allSettled([refreshAdmin(),loadAssociationEditor(),loadTeamEditor()]);}catch{sessionStorage.removeItem("ammu_admin_token");setLogged(false);}}
+ if(token()){try{await api("/api/admin/me",{auth:true});setLogged(true);refreshAppearanceForm();await Promise.allSettled([refreshAdmin(),loadAssociationEditor(),loadTeamEditor(),loadReservations()]);}catch{sessionStorage.removeItem("ammu_admin_token");setLogged(false);}}
  $("#category-form").onsubmit=async e=>{
   e.preventDefault();const id=$("#cat-id").value;
   try{await api("/api/admin/categories"+(id?"/"+id:""),{method:id?"PUT":"POST",auth:true,body:{name:$("#cat-name").value}});$("#cat-id").value="";$("#cat-name").value="";await refreshCategories();notice("Catégorie enregistrée.");}catch(err){notice(err.message,true);}
@@ -341,13 +386,18 @@ async function adminPage(){
   try{await api("/api/admin/vehicles"+(id?"/"+id:""),{auth:true,method:id?"PUT":"POST",body:b});resetVehicle();await refreshAdmin();notice("Produit enregistré.");}catch(err){notice(err.message,true);}
  };
  $("#news-form").onsubmit=async e=>{e.preventDefault();const id=$("#n-id").value;
-  try{await api("/api/admin/news"+(id?"/"+id:""),{auth:true,method:id?"PUT":"POST",body:{title:$("#n-title").value,content:$("#n-content").value,image_url:$("#n-image-url").value,published:$("#n-published").checked}});resetNews();await refreshAdmin();notice("Événement enregistrée.");}catch(err){notice(err.message,true);}
+  try{await api("/api/admin/news"+(id?"/"+id:""),{auth:true,method:id?"PUT":"POST",body:{title:$("#n-title").value,content:$("#n-content").value,image_url:$("#n-image-url").value,event_date:$("#n-event-date").value,published:$("#n-published").checked}});resetNews();await refreshAdmin();notice("Événement enregistrée.");}catch(err){notice(err.message,true);}
  };
+ $("#admin-reservations").addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;const id=b.dataset.bookId||b.dataset.bookDelete;if(!id)return;
+  try{if(b.dataset.bookDelete){if(!confirm('Supprimer cette demande ?'))return;await api('/api/admin/reservations/'+id,{method:'DELETE',auth:true});}
+  else await api('/api/admin/reservations/'+id,{method:'PUT',auth:true,body:{status:b.dataset.bookStatus}});
+  await loadReservations();notice('Demande mise à jour.');}catch(err){notice(err.message,true);}
+ });
  $("#admin-panel").addEventListener("click",async e=>{
   const b=e.target.closest("button");if(!b)return;
   let id;
   if(id=b.dataset.editV){const v=vehicles.find(x=>x.id===Number(id));if(!v)return;$("#v-id").value=v.id;$("#v-name").value=v.model;$("#v-brand").value=v.brand;$("#v-category").value=v.category;$("#v-price").value=v.price;$("#v-seats").value=v.seats??0;$("#v-trunk").value=v.trunk_kg??0;$("#v-image-url").value=v.image_url||"";$("#v-crop-x").value=v.crop_x??50;$("#v-crop-y").value=v.crop_y??50;$("#v-crop-zoom").value=v.crop_zoom??1;updateCropPreview();$("#v-description").value=v.description||"";$("#v-featured").checked=!!v.featured;$("#vehicle-form-title").textContent="Modifier le produit";$("#vehicle-form").scrollIntoView({behavior:"smooth"});}
-  if(id=b.dataset.editN){const n=news.find(x=>x.id===Number(id));if(!n)return;$("#n-id").value=n.id;$("#n-title").value=n.title;$("#n-content").value=n.content;$("#n-image-url").value=n.image_url||"";$("#n-published").checked=!!n.published;$("#news-form-title").textContent="Modifier l'événement";$("#news-form").scrollIntoView({behavior:"smooth"});}
+  if(id=b.dataset.editN){const n=news.find(x=>x.id===Number(id));if(!n)return;$("#n-id").value=n.id;$("#n-title").value=n.title;$("#n-content").value=n.content;$("#n-image-url").value=n.image_url||"";$("#n-event-date").value=n.event_date||"";$("#n-published").checked=!!n.published;$("#news-form-title").textContent="Modifier l'événement";$("#news-form").scrollIntoView({behavior:"smooth"});}
   if(id=b.dataset.delV){if(!confirm("Supprimer ce produit ?"))return;try{await api("/api/admin/vehicles/"+id,{auth:true,method:"DELETE"});await refreshAdmin();}catch(err){notice(err.message,true);}}
   if(id=b.dataset.delN){if(!confirm("Supprimer cette événement ?"))return;try{await api("/api/admin/news/"+id,{auth:true,method:"DELETE"});await refreshAdmin();}catch(err){notice(err.message,true);}}
  });
