@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Ammu-Nation Nord, armurerie à San Andreas." name="description"/>
+<title>
+   Catalogue | Ammu-Nation Nord
+  </title>
+<link href="assets/css/style.css" rel="stylesheet"/>
+<script defer="" src="assets/js/config.js">
+</script>
+<script defer="" src="assets/js/app.js">
+</script>
+</head>
+<body data-page="catalogue">
+<div id="header">
+</div>
+<main>
+<div class="container">
+<div class="page-head">
+<h1>
+      Notre catalogue
+     </h1>
+<p class="muted">
+      Trouvez le produit qui vous correspond.
+     </p>
+</div>
+<div id="status">
+</div>
+<div class="filters-toolbar">
+<button aria-controls="filters-panel" aria-expanded="false" class="btn-filters" id="toggle-filters" type="button">
+<span>☷ Filtres avancés</span><span aria-hidden="true" id="filters-arrow">▾</span>
+</button>
+</div>
+<div class="filters" hidden="" id="filters-panel">
+<div class="filter-heading">
+<strong>
+       Filtrer les produits
+      </strong>
+<button class="btn outline small" id="reset-filters" type="button">
+       Réinitialiser
+      </button>
+</div>
+<div class="filter-grid">
+<div class="field">
+<label for="search">
+        Recherche
+       </label>
+<input id="search" placeholder="Nom du produit"/>
+</div>
+<div class="field">
+<label for="category">
+        Catégorie
+       </label>
+<select id="category">
+<option value="">
+         Toutes les catégories
+        </option>
+</select>
+</div>
+<div class="field">
+<label for="price-min">
+        Prix minimum ($)
+       </label>
+<input id="price-min" min="0" placeholder="Min" type="number"/>
+</div>
+<div class="field">
+<label for="price-max">
+        Prix maximum ($)
+       </label>
+<input id="price-max" min="0" placeholder="Max" type="number"/>
+</div>
+
+
+
+</div>
+</div>
+<p class="muted" id="results">
+</p>
+<div class="grid" id="vehicle-grid">
+</div>
+</div>
+</main>
+<div id="footer">
+</div>
+<div aria-labelledby="vehicle-modal-title" aria-modal="true" class="vehicle-modal" hidden="" id="vehicle-modal" role="dialog"><div class="vehicle-modal-dialog"><button aria-label="Fermer la fiche" class="vehicle-modal-close" id="vehicle-modal-close" type="button">×</button><div id="vehicle-modal-content"></div></div></div>
+</body>
+</html>

@@ -1,0 +1,527 @@
+/* H&R LEGACY — DESIGN PREMIUM CLAIR / GRIS ANTHRACITE */
+:root {
+  --bg: #f5f6f7;
+  --white: #ffffff;
+  --ink: #171c22;
+  --muted: #6a737e;
+  --line: #e3e7eb;
+  --accent: #2b3948;
+  --dark: #171e27;
+  --radius: 18px;
+  --shadow: 0 14px 40px rgba(18, 28, 39, .055);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, 'Segoe UI', system-ui, sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+img { max-width: 100%; display: block; }
+.container { width: min(1200px, calc(100% - 48px)); margin-inline: auto; }
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+
+/* Navigation */
+.topbar, .site-header { background: rgba(255,255,255,.96); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 40; backdrop-filter: blur(16px); }
+.nav { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { color: #131b24; font-size: 1.38rem; font-weight: 900; letter-spacing: .13em; line-height: 1.15; white-space: nowrap; }
+.brand small { display: block; margin-top: 5px; color: #818a94; font-size: .56rem; font-weight: 750; letter-spacing: .28em; }
+.links { display: flex; align-items: center; gap: 8px; }
+.links a { display: inline-flex; align-items: center; min-height: 42px; padding: 9px 13px; border-radius: 9px; font-size: .9rem; font-weight: 650; color: #53606c; transition: .2s ease; }
+.links a:hover, .links a.active { background: #f0f2f4; color: #131b24; }
+.menu-btn { display: none; border: 1px solid var(--line); border-radius: 10px; background: white; padding: 9px 13px; }
+
+/* Boutons */
+.btn { display: inline-flex; justify-content: center; align-items: center; gap: 9px; min-height: 46px; padding: 12px 20px; border: 1px solid var(--dark); border-radius: 10px; background: var(--dark); color: #fff; font-weight: 750; font-size: .91rem; line-height: 1.2; transition: transform .2s, background .2s, box-shadow .2s; }
+.btn:hover { transform: translateY(-2px); background: #334252; box-shadow: 0 8px 20px rgba(23,30,39,.14); }
+.btn.outline { background: white; border-color: #cfd5dc; color: var(--dark); }
+.btn.outline:hover { background: #f2f4f6; }
+.btn.small { min-height: 35px; padding: 8px 12px; font-size: .82rem; }
+.btn.danger { background: #a33e46; border-color: #a33e46; }
+.btn:disabled { opacity: .48; cursor: not-allowed; transform: none; }
+:focus-visible { outline: 3px solid #8aa1b8; outline-offset: 3px; }
+
+/* Accueil */
+.hero { position: relative; isolation: isolate; display: flex; align-items: center; min-height: 560px; padding: 110px 0; color: white; background: linear-gradient(95deg, rgba(13,19,27,.94) 0%, rgba(21,30,40,.84) 49%, rgba(28,37,46,.48) 100%), url('../img/showroom.svg') center/cover no-repeat; }
+.hero::after { content: ''; position: absolute; z-index: -1; inset: 0; background: radial-gradient(ellipse at 75% 65%, transparent, rgba(8,14,20,.20)); }
+.eyebrow { display: inline-block; color: #aebfce; font-size: .76rem; font-weight: 850; letter-spacing: .2em; text-transform: uppercase; }
+.hero h1 { max-width: 770px; margin: 18px 0 20px; font-size: clamp(2.7rem, 6vw, 5.4rem); line-height: 1.06; letter-spacing: -.055em; font-weight: 850; }
+.hero p { max-width: 590px; color: #d5dde4; font-size: clamp(1rem, 2vw, 1.16rem); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 32px; }
+.hero .btn { min-height: 52px; }
+.hero .btn:not(.outline) { background: white; color: #171e27; border-color: white; }
+.hero .btn.outline { color: white; background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.48); }
+.hero .btn.outline:hover { background: rgba(255,255,255,.17); }
+
+/* Titres et sections */
+.section { padding: 82px 0; }
+.section[style*="background"] { background: #edf0f3 !important; }
+.section-head { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin-bottom: 28px; }
+.section h2, .page-head h1 { margin: 0; font-size: clamp(1.9rem, 3.3vw, 2.9rem); line-height: 1.15; font-weight: 830; letter-spacing: -.045em; }
+.page-head { padding: 64px 0 34px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.page-head p { max-width: 740px; margin: 12px 0 0; font-size: 1.04rem; }
+main { min-height: 55vh; }
+
+/* Catalogue et cartes */
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; }
+.card, .panel { min-width: 0; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.card { transition: transform .22s ease, box-shadow .22s ease; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 20px 45px rgba(20,30,40,.11); }
+.card-image { width: 100%; height: 235px; object-fit: cover; background: #e9edf0; }
+.card-body { padding: 24px; }
+.card h3 { margin: 10px 0 7px; font-size: 1.22rem; letter-spacing: -.025em; }
+.card p { margin: 8px 0; color: var(--muted); }
+.card-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #edf0f2; }
+.price { color: #141c24; font-size: 1.25rem; font-weight: 850; letter-spacing: -.035em; }
+.tag { display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 999px; background: #edf1f4; color: #485a6a; font-size: .76rem; font-weight: 750; }
+.tag.green { background: #e4f5ed; color: #24754e; }
+.tag.orange { background: #fff1db; color: #925e15; }
+
+/* Formulaires */
+.panel { padding: 28px; }
+.panel h2 { margin-top: 0; font-size: 1.3rem; letter-spacing: -.025em; }
+.filters { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; margin: 0 0 28px; padding: 18px; background: white; border: 1px solid var(--line); border-radius: 15px; }
+.field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+.field label { color: #394552; font-size: .87rem; font-weight: 750; }
+.field input, .field select, .field textarea, .filters input, .filters select { width: 100%; min-width: 0; min-height: 47px; padding: 12px 14px; border: 1px solid #d5dce2; border-radius: 10px; background: #fafbfc; color: #18212b; outline: none; transition: background .2s, border-color .2s, box-shadow .2s; }
+.field input:focus, .field select:focus, .field textarea:focus, .filters input:focus, .filters select:focus { background: white; border-color: #667f98; box-shadow: 0 0 0 4px rgba(95,122,149,.12); }
+.field textarea { min-height: 120px; resize: vertical; }
+input[type="checkbox"] { accent-color: #263443; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+.layout { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); gap: 26px; }
+.detail-img, .detail-image { width: 100%; max-height: 470px; object-fit: cover; border-radius: 16px; background: #e7ebee; }
+
+/* Administration */
+body[data-page="admin"] #login-panel { margin: 30px auto 80px; max-width: 480px !important; padding: 36px; }
+body[data-page="admin"] #login-panel h2 { font-size: 1.65rem; }
+body[data-page="admin"] #login-form .btn { width: 100%; margin-top: 7px; }
+.stat-row { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
+.stat { padding: 25px; border: 1px solid var(--line); border-radius: 16px; background: white; color: var(--muted); font-size: .88rem; font-weight: 650; box-shadow: var(--shadow); }
+.stat strong { display: block; margin-top: 7px; color: var(--dark); font-size: 2rem; line-height: 1.2; }
+.admin-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.admin-tabs button { padding: 11px 17px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: #64707c; font-weight: 750; }
+.admin-tabs button:hover { background: #e9edf0; }
+.admin-tabs button.active { background: #1d2834; color: white; }
+.table-wrap { width: 100%; overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; text-align: left; }
+.data-table th, .data-table td { padding: 15px 12px; border-bottom: 1px solid #edf0f2; vertical-align: middle; }
+.data-table th { color: #687482; background: #f8f9fa; font-size: .76rem; font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
+.data-table tbody tr:hover { background: #fafbfc; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Réservations et messages */
+.slots { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+.slot { padding: 11px 8px; border: 1px solid #d6dde3; border-radius: 9px; background: white; color: #354351; font-weight: 700; }
+.slot:hover { border-color: #677d90; background: #f1f4f6; }
+.slot.selected { color: white; background: #1c2834; border-color: #1c2834; }
+.slot:disabled { opacity: .38; cursor: not-allowed; }
+.notice { padding: 15px 18px; border: 1px solid #cbdbe7; border-radius: 11px; background: #eef5fa; color: #365269; margin: 14px 0; }
+.notice.error { border-color: #efc5c8; background: #fff0f1; color: #9b333e; }
+.notice.success { border-color: #bfe2d0; background: #eaf8f0; color: #236947; }
+.empty { padding: 36px 18px; text-align: center; color: var(--muted); }
+.article-content { white-space: pre-line; overflow-wrap: anywhere; }
+.calendar-note { font-size: .88rem; color: var(--muted); }
+
+/* Pied de page */
+.footer { margin-top: 75px; padding: 45px 0; background: #161e27; color: #e5eaf0; }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.footer p { color: #aeb8c2; }
+
+/* Tablettes et mobiles */
+@media (max-width: 950px) {
+  .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .layout { grid-template-columns: 1fr; }
+  .links { display: none; position: absolute; top: 100%; left: 0; right: 0; padding: 16px 24px 22px; background: white; border-bottom: 1px solid var(--line); box-shadow: 0 14px 24px rgba(0,0,0,.07); flex-direction: column; align-items: stretch; }
+  .links.open { display: flex; }
+  .links a { width: 100%; }
+  .menu-btn { display: inline-flex; }
+  .filters { grid-template-columns: 1fr 1fr; }
+  .filters input { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .container { width: min(100% - 30px, 1200px); }
+  .nav { min-height: 72px; }
+  .brand { font-size: 1.16rem; }
+  .hero { min-height: 510px; padding: 80px 0; }
+  .hero h1 { font-size: clamp(2.45rem, 10vw, 3.6rem); }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .section { padding: 56px 0; }
+  .page-head { padding: 43px 0 26px; }
+  .grid, .two, .stat-row { grid-template-columns: 1fr; }
+  .card-image { height: 215px; }
+  .panel { padding: 20px; }
+  .filters { grid-template-columns: 1fr; padding: 14px; }
+  .filters input { grid-column: auto; }
+  .section-head { align-items: start; }
+  .slots { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  body[data-page="admin"] #login-panel { padding: 24px; }
+  .admin-tabs button { flex: 1; padding: 10px; }
+  .footer { margin-top: 50px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+
+
+/* ===== H&R LEGACY : HEADER ET FOOTER REVISITES ===== */
+.site-header { background: rgba(255,255,255,.98); border-bottom: 1px solid #e6e9ed; box-shadow: 0 2px 18px rgba(19,28,40,.035); }
+.site-header .nav { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.site-header .brand { flex-shrink: 0; font-size: 1.4rem; font-weight: 900; letter-spacing: .11em; }
+.nav-links { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 7px; }
+.nav-links a { display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; border-radius: 10px; color: #556171; font-size: .91rem; font-weight: 650; white-space: nowrap; transition: background .2s ease,color .2s ease; }
+.nav-links a:hover, .nav-links a.is-active:not(.nav-admin) { color: #192532; background: #eef1f4; }
+.nav-links a.nav-admin { margin-left: 9px; background: #1c2835; color: #fff; padding-inline: 18px; }
+.nav-links a.nav-admin:hover, .nav-links a.nav-admin.is-active { background: #394d60; color: #fff; }
+.site-footer { margin-top: 78px; padding: 48px 0 0; background: #18232f; color: #fff; }
+.footer-content { display: flex; justify-content: space-between; align-items: flex-start; gap: 30px; padding-bottom: 38px; }
+.footer-brand { font-size: 1.28rem; font-weight: 900; letter-spacing: .13em; }
+.footer-identity p { margin: 9px 0 0; color: #aebac6; font-size: .93rem; }
+.footer-links { display: flex; gap: 11px 23px; flex-wrap: wrap; align-items: center; justify-content: flex-end; }
+.footer-links a { color: #cbd3db; font-size: .9rem; transition: color .2s ease; }
+.footer-links a:hover { color: #fff; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,.13); padding: 18px 0 22px; display: flex; align-items: center; justify-content: space-between; gap: 10px 25px; flex-wrap: wrap; font-size: .79rem; color: #a7b4c1; }
+@media(max-width: 980px) {
+ .site-header .nav { flex-direction: column; align-items: flex-start; padding-block: 18px; gap: 15px; }
+ .nav-links { justify-content: flex-start; width: 100%; gap: 5px; }
+ .nav-links a { padding: 9px 11px; }
+ .nav-links a.nav-admin { margin-left: 0; }
+}
+@media(max-width: 600px) {
+ .site-header .nav { padding-block: 14px; }
+ .nav-links { gap: 5px; }
+ .nav-links a { font-size: .84rem; padding: 8px 10px; }
+ .footer-content { flex-direction: column; gap: 25px; }
+ .footer-links { justify-content: flex-start; }
+ .footer-bottom { flex-direction: column; align-items: flex-start; }
+ .site-footer { margin-top: 55px; padding-top: 36px; }
+}
+
+/* Administration des images et catégories */
+.inline-admin-form{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin:22px 0}.inline-admin-form .field{flex:1;min-width:220px}.appearance-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin:22px 0}.appearance-preview{display:block;width:100%;height:165px;object-fit:cover;border-radius:12px;margin-top:10px;background:#e8edf1;border:1px solid #dce2e8}.brand-image{height:44px;width:auto;max-width:210px;object-fit:contain}.footer-brand .brand-image{height:50px}.image-page-head{background-size:cover;background-position:center;padding:60px 34px;border-radius:18px;color:white}.image-page-head h1,.image-page-head p{color:white!important}.hero{background-size:cover;background-position:center}@media(max-width:700px){.appearance-fields{grid-template-columns:1fr}.inline-admin-form{display:block}.inline-admin-form .btn{margin:6px 6px 6px 0}}
+
+/* Catalogue : filtres avancés */
+.filters { display:block; padding:22px; margin-bottom:24px; }
+.filter-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; }
+.filter-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.filter-grid .field { margin:0; min-width:0; }
+.filter-grid label { display:block; font-size:.86rem; font-weight:650; margin-bottom:7px; }
+.filter-grid input,.filter-grid select { width:100%; box-sizing:border-box; }
+.vehicle-specs { font-size:.9rem; color:#66717c; }
+@media(max-width:800px){ .filter-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:540px){ .filter-grid { grid-template-columns:1fr; } .filter-heading { flex-wrap:wrap; } }
+
+/* Catalogue : filtres repliables */
+.filters-toolbar{display:flex;justify-content:flex-end;margin:24px 0 16px}
+.btn-filters{display:inline-flex;align-items:center;justify-content:center;gap:14px;padding:13px 22px;border:1px solid #d7dce2;border-radius:12px;background:#fff;color:#18212b;font:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn-filters:hover,.btn-filters[aria-expanded="true"]{background:#18212b;color:#fff;border-color:#18212b}
+#filters-arrow{display:inline-block;transition:transform .2s}
+.btn-filters[aria-expanded="true"] #filters-arrow{transform:rotate(180deg)}
+#filters-panel[hidden]{display:none!important}
+#filters-panel{margin-bottom:24px}
+@media(max-width:600px){.btn-filters{width:100%}}
+
+/* Cartes du catalogue H&R Legacy */
+.vehicle-card { display:flex; flex-direction:column; border-radius:18px; overflow:hidden; }
+.vehicle-card-media { display:block; overflow:hidden; background:#e9edf0; }
+.vehicle-card .card-image { display:block; width:100%; height:225px; object-fit:cover; transition:transform .3s ease; }
+.vehicle-card:hover .card-image { transform:scale(1.045); }
+.vehicle-card-body { display:flex; flex:1; flex-direction:column; gap:10px; padding:22px; }
+.vehicle-card-brand { font-size:.76rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase; color:#7a8795; }
+.vehicle-card h3 { margin:0; font-size:1.35rem; color:#17212b; }
+.vehicle-card-facts { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+.vehicle-card-facts span { background:#f3f5f7; border:1px solid #e7ebef; padding:8px 11px; border-radius:9px; font-size:.84rem; font-weight:600; color:#445362; }
+.vehicle-card-bottom { margin-top:auto; padding-top:17px; border-top:1px solid #e9edf0; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+.vehicle-card-price-label { display:block; color:#7a8795; font-size:.75rem; }
+.vehicle-card-price { display:block; color:#18212b; font-size:1.35rem; letter-spacing:-.03em; }
+.vehicle-card-action { font-size:.85rem; white-space:nowrap; }
+@media(max-width:600px){.vehicle-card .card-image{height:210px}.vehicle-card-body{padding:18px}}
+
+/* Fenêtre de présentation des véhicules */
+.vehicle-card-simple .vehicle-card-media { border:0; padding:0; width:100%; cursor:pointer; text-align:left; }
+.vehicle-card-simple .vehicle-card-bottom { align-items:center; }
+.vehicle-modal[hidden] { display:none!important; }
+.vehicle-modal { position:fixed; inset:0; z-index:9999; background:rgba(11,20,30,.78); display:flex; align-items:center; justify-content:center; padding:22px; overflow-y:auto; }
+.vehicle-modal-dialog { position:relative; width:min(920px,100%); max-height:calc(100vh - 44px); overflow:auto; background:white; border-radius:20px; box-shadow:0 28px 90px rgba(0,0,0,.32); }
+.vehicle-modal-close { position:absolute; top:16px; right:16px; z-index:2; width:42px; height:42px; border:0; border-radius:50%; background:#fff; color:#17212b; box-shadow:0 2px 12px #0002; font-size:30px; line-height:1; cursor:pointer; }
+.modal-vehicle-image img { width:100%; height:clamp(210px,35vw,390px); display:block; object-fit:cover; background:#e8ebef; }
+.modal-vehicle-info { padding:30px; }
+.modal-vehicle-info h2 { font-size:clamp(1.5rem,3vw,2.25rem); margin:5px 0 8px; }
+.modal-vehicle-category { color:#687584; }
+.modal-vehicle-specs { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:24px 0; }
+.modal-vehicle-specs>div { display:flex; flex-direction:column; gap:8px; padding:18px; background:#f2f4f6; border-radius:12px; }
+.modal-vehicle-specs span,.modal-vehicle-price span { font-size:.85rem; color:#697582; }
+.modal-vehicle-specs strong { font-size:1.2rem; }
+.modal-vehicle-price { border-top:1px solid #e4e7ea; padding-top:20px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.modal-vehicle-price strong { font-size:1.8rem; color:#18212b; }
+.modal-vehicle-description { white-space:pre-wrap; margin:20px 0 0; line-height:1.7; }
+body.modal-open { overflow:hidden; }
+@media(max-width:600px) { .vehicle-modal { padding:10px; } .vehicle-modal-dialog { max-height:calc(100vh - 20px); } .modal-vehicle-info { padding:20px; } .modal-vehicle-specs { grid-template-columns:1fr 1fr; } .modal-vehicle-price { align-items:flex-start; flex-direction:column; } }
+
+/* Couleur de fond configurable depuis l’administration */
+.color-setting { margin: 24px 0; padding: 20px; border: 1px solid var(--line); border-radius: 14px; }
+.color-setting-controls { display:flex; align-items:center; flex-wrap:wrap; gap:14px; margin-top:10px; }
+.color-setting input[type="color"] { width:68px; height:48px; padding:4px; border:1px solid var(--line); border-radius:10px; background:white; cursor:pointer; }
+.color-setting output { font-family:monospace; font-weight:700; }
+
+/* Thème public clair / sombre */
+.theme-toggle {border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:var(--white);color:var(--ink);font-weight:750;cursor:pointer;white-space:nowrap;}
+.theme-toggle:hover {filter:brightness(.92);}
+:root[data-theme="dark"] {color-scheme:dark;--bg:#111820;--white:#1b2530;--ink:#edf2f7;--muted:#aab8c7;--line:#354452;--accent:#c0d0e1;--dark:#edf2f7;--shadow:0 14px 40px rgba(0,0,0,.2);}
+[data-theme="dark"] body,[data-theme="dark"] main {color:var(--ink);}
+[data-theme="dark"] .site-header,[data-theme="dark"] .topbar,[data-theme="dark"] .card,[data-theme="dark"] .panel,[data-theme="dark"] .filters,[data-theme="dark"] .stat,[data-theme="dark"] .site-footer {background:var(--white);color:var(--ink);border-color:var(--line);}
+[data-theme="dark"] .brand,[data-theme="dark"] .footer-brand,[data-theme="dark"] .card h3,[data-theme="dark"] .price,[data-theme="dark"] .vehicle-card-price,[data-theme="dark"] .stat strong,[data-theme="dark"] .field label {color:var(--ink);}
+[data-theme="dark"] .nav-links a,[data-theme="dark"] .links a,[data-theme="dark"] .footer-links a,[data-theme="dark"] .muted,[data-theme="dark"] .card p {color:var(--muted);}
+[data-theme="dark"] .field input,[data-theme="dark"] .field select,[data-theme="dark"] .field textarea,[data-theme="dark"] .filters input,[data-theme="dark"] .filters select,[data-theme="dark"] .data-table th,[data-theme="dark"] .data-table td {background:#243240;color:var(--ink);border-color:var(--line);}
+[data-theme="dark"] .data-table tbody tr:hover,[data-theme="dark"] .admin-tabs button:hover {background:#283848;}
+[data-theme="dark"] .tag,[data-theme="dark"] .modal-vehicle-specs>div,[data-theme="dark"] .modal-vehicle-category {background:#283848;color:var(--ink);}
+[data-theme="dark"] .vehicle-modal-dialog,[data-theme="dark"] .modal-vehicle-info {background:var(--white);color:var(--ink);}
+[data-theme="dark"] .btn.outline,[data-theme="dark"] .btn-filters,[data-theme="dark"] .theme-toggle {background:#263443;color:var(--ink);border-color:var(--line);}
+[data-theme="dark"] .site-footer,[data-theme="dark"] .footer-bottom,[data-theme="dark"] .card-bottom,[data-theme="dark"] .vehicle-card-bottom {border-color:var(--line);}
+/* Cadrage non destructif : conserve l'URL de l'image d'origine */
+.crop-editor {padding:20px;border:1px solid var(--line);border-radius:14px;margin:18px 0;}
+.crop-preview {display:block;width:100%;max-width:580px;aspect-ratio:16/10;object-fit:cover;object-position:50% 50%;border-radius:12px;background:#e9edf0;border:1px solid var(--line);}
+.crop-editor input[type="range"] {padding:0;min-height:32px;cursor:pointer;accent-color:#607b96;}
+.crop-editor output {font-weight:750;}
+@media(max-width:800px){.theme-toggle{font-size:.78rem;padding:8px}.nav{flex-wrap:wrap}}
+
+/* Sélecteur clair / sombre : icône seule */
+.theme-toggle{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:9px;flex-shrink:0}
+.theme-toggle svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* Cadrage libre avec grille des tiers */
+.crop-stage{position:relative;width:100%;max-width:580px;aspect-ratio:16/10;overflow:hidden;border:1px solid var(--line);border-radius:12px;background:repeating-conic-gradient(#e1e5ea 0 25%,#f1f3f6 0 50%) 50%/22px 22px;cursor:grab;touch-action:none;user-select:none}
+.crop-stage.dragging{cursor:grabbing}
+.crop-stage-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;max-width:none;pointer-events:none;transform-origin:center;will-change:transform}
+.crop-grid{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to right,transparent calc(33.333% - .5px),rgba(255,255,255,.85) 33.333%,transparent calc(33.333% + .5px),transparent calc(66.666% - .5px),rgba(255,255,255,.85) 66.666%,transparent calc(66.666% + .5px)),linear-gradient(to bottom,transparent calc(33.333% - .5px),rgba(255,255,255,.85) 33.333%,transparent calc(33.333% + .5px),transparent calc(66.666% - .5px),rgba(255,255,255,.85) 66.666%,transparent calc(66.666% + .5px));box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+.vehicle-card-media,.modal-vehicle-image{overflow:hidden}
+.vehicle-card-media img.crop-render,.modal-vehicle-image img.crop-render,.detail-image.crop-render{object-fit:contain;transform-origin:center;max-width:none}
+[data-theme="dark"] .crop-stage{background-color:#263443}
+
+
+
+/* H&R LEGACY — BLEU NUIT FIXE (référence visuelle) */
+:root {
+ color-scheme:dark;
+ --bg:#111820; --white:#1b2530; --ink:#edf2f7;
+ --muted:#aab8c7; --line:#354452; --accent:#c0d0e1;
+ --dark:#edf2f7; --shadow:0 14px 40px rgba(0,0,0,.2);
+}
+html,body,main{background:#111820!important;color:var(--ink)}
+.site-header,.topbar,.site-footer,.footer{background:#1b2530!important;color:var(--ink);border-color:#354452!important}
+.card,.panel,.filters,.stat,.vehicle-modal-dialog,.modal-vehicle-info,.vehicle-card,.filters-panel{background:#1b2530!important;color:var(--ink)!important;border-color:#354452!important}
+.section[style*="background"]{background:#15202a!important}
+.brand,.footer-brand,.card h3,.card h2,.price,.vehicle-card-price,.stat strong,.field label,.modal-vehicle-info h2{color:#edf2f7!important}
+.nav-links a,.links a,.footer-links a,.muted,.card p{color:#aab8c7}
+.nav-links a:hover,.links a:hover,.admin-tabs button:hover{background:#283848!important;color:#fff!important}
+.nav-links a.is-active:not(.nav-admin){background:#edf2f7!important;color:#17212b!important}
+.field input,.field select,.field textarea,.filters input,.filters select,input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),textarea,select{background:#243240!important;color:#edf2f7!important;border-color:#354452!important}
+.btn,.admin-tabs button.active{background:#edf2f7!important;color:#17212b!important;border-color:#edf2f7!important}
+.btn:hover{background:#d1dce8!important}
+.btn.outline,.btn-filters,.menu-btn,.slot,.nav-links a.nav-admin{background:#263443!important;color:#edf2f7!important;border-color:#354452!important}
+.btn.danger{background:#a33e46!important;color:white!important;border-color:#a33e46!important}
+.vehicle-card-facts span,.modal-vehicle-specs>div,.tag,.modal-vehicle-category,.data-table th,.data-table td{background:#283848!important;color:#edf2f7!important;border-color:#354452!important}
+.data-table tbody tr:hover{background:#283848!important}
+.vehicle-card-media,.card-image,.modal-vehicle-image img,.detail-img,.detail-image,.appearance-preview{background:#263443!important}
+.vehicle-modal{background:rgba(8,14,20,.85)!important}
+.vehicle-modal-close{background:#263443!important;color:#fff!important}
+.crop-stage{background-color:#263443!important}
+.site-footer,.footer-bottom{border-color:#354452!important}
+/* L'option de thème n'existe plus */
+.theme-toggle,#theme-toggle{display:none!important}
+
+/* Jusqu’à trois notifications empilées sans se chevaucher */
+.site-popup-stack{position:fixed;bottom:22px;left:22px;display:flex;flex-direction:column;gap:12px;z-index:2000;max-height:calc(100dvh - 44px);overflow-y:auto;max-width:calc(100vw - 44px)}
+.site-popup-stack .site-popup-live{position:relative;bottom:auto;left:auto;animation:popup-in .25s ease-out}
+@media(max-width:500px){.site-popup-stack{bottom:12px;left:12px;max-height:calc(100dvh - 24px);max-width:calc(100vw - 24px)}.site-popup-stack .site-popup-live{width:calc(100vw - 24px)}}
+
+
+/* H&R Legacy : optimisation smartphones et tablettes */
+.mobile-menu-toggle{display:none;align-items:center;justify-content:center;flex-direction:column;gap:5px;width:46px;height:46px;border:1px solid #354452;border-radius:11px;background:#263443;color:#edf2f7;cursor:pointer;flex-shrink:0}
+.mobile-menu-toggle span{display:block;width:21px;height:2px;background:currentColor;border-radius:3px;transition:transform .2s,opacity .2s}
+.mobile-menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.mobile-menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.mobile-menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+@media(max-width:800px){
+  .container{width:calc(100% - 32px)}
+  .site-header .nav{min-height:68px;flex-wrap:wrap;gap:0;position:relative;padding:10px 0}
+  .site-header .brand{font-size:1.13rem;max-width:calc(100% - 60px)}
+  .mobile-menu-toggle{display:flex}
+  .site-header .nav-links{display:none!important;flex-basis:100%;width:100%;flex-direction:column;align-items:stretch;gap:6px;padding:12px 0 4px}
+  .site-header .nav-links.mobile-open{display:flex!important}
+  .site-header .nav-links a{display:flex;justify-content:flex-start;width:100%;min-height:46px;padding:12px 16px;border-radius:10px}
+  .hero{min-height:410px;padding:70px 0}
+  .hero h1{font-size:clamp(2.1rem,8vw,3.6rem)}
+  .section{padding:44px 0}
+  .page-head{padding:38px 0 24px}
+  .grid,.stat-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .layout{grid-template-columns:1fr}
+  .footer-content,.footer-bottom{gap:18px;flex-wrap:wrap}
+  .admin-tabs{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;padding-bottom:14px}
+  .admin-tabs button{white-space:nowrap;flex-shrink:0}
+  .table-wrap{-webkit-overflow-scrolling:touch}
+  .data-table{min-width:580px}
+  .crop-stage{max-width:100%;touch-action:none}
+}
+@media(max-width:560px){
+  .container{width:calc(100% - 28px)}
+  .grid,.stat-row,.two,.filter-grid{grid-template-columns:1fr!important}
+  .panel{padding:18px}
+  .vehicle-card .card-image{height:210px}
+  .vehicle-card-body{padding:17px}
+  .vehicle-card-bottom{align-items:stretch}
+  .vehicle-card-action{width:100%}
+  .modal-vehicle-specs{grid-template-columns:1fr 1fr;gap:8px}
+  .modal-vehicle-specs>div{padding:12px}
+  .vehicle-modal{padding:8px}
+  .vehicle-modal-dialog{max-height:calc(100dvh - 16px)}
+  .modal-vehicle-info{padding:16px}
+  .hero-actions .btn{width:100%}
+  .filters-toolbar .btn-filters{width:100%}
+  .site-popup-stack{max-height:55dvh;overflow-y:auto}
+  .site-popup{width:min(380px,calc(100vw - 24px))}
+  input,select,textarea{font-size:16px!important}
+}
+@media(hover:none){.card:hover,.btn:hover{transform:none}}
+
+/* Correction du prix dans la fenêtre « Voir le véhicule » (thème bleu nuit). */
+.vehicle-modal .modal-vehicle-price strong,
+.vehicle-modal-dialog .modal-vehicle-price strong {
+  color: #ffffff !important;
+}
+.vehicle-modal .modal-vehicle-price span,
+.vehicle-modal-dialog .modal-vehicle-price span {
+  color: #c6d2df !important;
+}
+
+/* Import des photos des véhicules */
+.vehicle-upload-zone{border:2px dashed #526579;border-radius:14px;background:#192734;color:#f4f7fb;min-height:115px;padding:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;cursor:pointer;transition:.2s}
+.vehicle-upload-zone span{font-size:.87rem;color:#a9b8c7}
+.vehicle-upload-zone:hover,.vehicle-upload-zone.drag-over,.vehicle-upload-zone:focus-visible{border-color:#b8d8ff;background:#26384a;outline:none}
+
+
+/* AMMU-NATION NORD — THEME NOIR ET ROUGE UNIFIE */
+:root, :root[data-theme="dark"] {color-scheme:dark;--bg:#080809;--white:#151113;--ink:#faf8f9;--muted:#bdb1b5;--line:#3b2028;--accent:#ed1027;--dark:#ed1027;--shadow:0 18px 50px rgba(0,0,0,.3)}
+html,body,main{background:#080809;color:#faf8f9}
+body{min-height:100vh;display:flex;flex-direction:column}
+body>main{flex:1;min-height:0;padding-bottom:65px}
+body[data-page="home"]>main{padding-bottom:0}
+.site-header,.topbar{background:rgba(5,5,7,.97)!important;border-bottom:1px solid #8e1022!important;box-shadow:0 6px 26px #0007}
+.brand,.footer-brand{color:#fff!important}.brand span,.eyebrow{color:#ff3047!important}
+.nav-links a,.links a{color:#f1e9ec!important}
+.nav-links a:hover,.nav-links a.is-active:not(.nav-admin),.nav-links a.active,.links a.active,.links a:hover{background:#ed1027!important;color:white!important}
+.nav-links a.nav-admin{background:#140b0e!important;border:1px solid #ae1428!important;color:#fff!important}
+.nav-links a.nav-admin:hover,.nav-links a.nav-admin.is-active{background:#d20c25!important}
+.hero{min-height:560px;background:linear-gradient(90deg,#020203 0%,rgba(3,2,3,.97) 24%,rgba(17,3,7,.78) 52%,rgba(15,0,3,.20) 100%),url('../img/armurerie-rouge.jpg') center/cover no-repeat!important;border-bottom:1px solid #d8122a}
+.hero::after{background:linear-gradient(0deg,rgba(0,0,0,.32),transparent 45%)}
+.hero h1{font-weight:900;max-width:820px;text-shadow:0 5px 24px #000}
+.hero h1 em,.section h2 em{font-style:normal;color:#ff1c36}
+.hero p{color:#f0e8ea}
+.btn,.hero .btn:not(.outline),.admin-tabs button.active{background:#ed1027!important;border-color:#ed1027!important;color:#fff!important;box-shadow:0 4px 20px #ed102733}
+.btn:hover,.hero .btn:hover{background:#ff3048!important;border-color:#ff3048!important;box-shadow:0 6px 28px #ed102755}
+.btn.outline,.btn-filters{background:#130b0f!important;border:1px solid #a8142a!important;color:#fff!important;box-shadow:none!important}
+.btn.outline:hover,.btn-filters:hover,.btn-filters[aria-expanded="true"]{background:#3c111e!important;border-color:#ff3048!important}
+.btn.danger{background:#8f1727!important;border-color:#8f1727!important}
+.section,.section[style*="background"],section[style*="background"]{background:#0b090b!important}
+.section:nth-of-type(odd){background:#100b0e!important}
+.section h2,.page-head h1,.card h3,.panel h2{color:#fff!important}
+.page-head,.image-page-head{position:relative;overflow:hidden;margin:34px 0 28px;padding:48px clamp(22px,5vw,64px)!important;border:1px solid #4b1927!important;border-radius:18px!important;background:linear-gradient(105deg,#0a090b 0%,#1b0a11 57%,#390a19 100%)!important;box-shadow:inset 0 1px #ffffff08,0 14px 38px #0005;color:#fff!important}
+.page-head::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:#ed1027;box-shadow:0 0 22px #ed102766}
+.page-head::after{content:"";position:absolute;width:250px;height:250px;right:-65px;top:-130px;border:1px solid #ed10272c;border-radius:50%;pointer-events:none}
+.page-head h1{font-size:clamp(2rem,4vw,3.25rem);letter-spacing:-.045em}
+.page-head p{color:#d6c8cd!important}
+.image-page-head{background-size:cover!important;background-position:center!important}
+.card,.panel,.filters,.stat,.vehicle-card,.vehicle-modal-dialog,.site-popup{background:#171114!important;border:1px solid #42232d!important;color:#f8f4f6!important;box-shadow:0 12px 34px #0005!important}
+.card:hover,.vehicle-card:hover{border-color:#c31a34!important;box-shadow:0 20px 40px #0009!important}
+.card p,.vehicle-card p,.panel p,.muted,.stat,.vehicle-specs{color:#c8b9be!important}
+.card-bottom,.vehicle-card-bottom,.admin-tabs,.filter-heading{border-color:#42232d!important}
+.price,.vehicle-card-price,.modal-vehicle-price strong,.stat strong{color:#fff!important}
+.card-image,.vehicle-card-media,.detail-img,.detail-image,.modal-vehicle-image img,.appearance-preview{background:#25151b!important}
+.field label,.filter-grid label{color:#f6e9ee!important}
+.field input,.field select,.field textarea,.filters input,.filters select,input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),textarea,select{background:#21171c!important;color:#fff!important;border-color:#60303e!important}
+input::placeholder,textarea::placeholder{color:#ad9ca2!important}
+.field input:focus,.field select:focus,.field textarea:focus,input:focus,textarea:focus,select:focus{border-color:#f32942!important;box-shadow:0 0 0 3px #ed102729!important}
+input[type="checkbox"],input[type="radio"],input[type="range"]{accent-color:#ed1027!important}
+option{background:#21171c;color:#fff}
+.tag,.vehicle-card-facts span,.modal-vehicle-specs>div,.modal-vehicle-category{background:#28191f!important;color:#f5e8ec!important;border-color:#4c2934!important}
+.tag.green{background:#153628!important;color:#b8f5ce!important}.tag.orange{background:#3b2917!important;color:#ffe1a8!important}
+.data-table,.table-wrap{background:#171114!important;color:#fff!important}
+.data-table th{background:#2a131c!important;color:#fff!important}.data-table td{background:#171114!important;color:#eee4e7!important;border-color:#462630!important}.data-table tbody tr:hover td{background:#331620!important}
+.admin-tabs button{color:#d9c7ce!important}.admin-tabs button:hover{background:#38121d!important;color:#fff!important}
+.notice{background:#23161c!important;border-color:#6a3343!important;color:#ffe9ef!important}.notice.error{background:#39121e!important;border-color:#a12a40!important;color:#ffcbd4!important}.notice.success{background:#142a20!important;border-color:#276744!important;color:#c6f5d9!important}
+.slot{background:#24181e!important;color:#fff!important;border-color:#65323f!important}.slot:hover{background:#3b1925!important}.slot.selected{background:#ed1027!important;border-color:#ed1027!important}
+.vehicle-modal-close{background:#26141b!important;color:#fff!important;border:1px solid #6a2638!important}
+.modal-vehicle-info{background:#171114!important;color:#fff!important}
+.vehicle-upload-zone{background:#24151b!important;color:#fff!important;border-color:#933247!important}.vehicle-upload-zone:hover{background:#391722!important;border-color:#f32a46!important}
+.site-footer,.footer{margin-top:0!important;background:#060607!important;color:#fff!important;border-top:1px solid #681326!important}
+.footer-identity p,.footer-links a,.footer-bottom{color:#bbaeb4!important}.footer-links a:hover{color:#ff344d!important}
+.footer-bottom{border-color:#38202a!important}
+.filters-toolbar{margin:22px 0 20px}
+#results{font-size:.9rem;color:#cbbac0!important}
+body[data-page="catalogue"] #vehicle-grid:empty{min-height:150px}
+body[data-page="catalogue"] #vehicle-grid:empty::after{content:"Le catalogue sera bientôt disponible. Revenez découvrir nos produits !";display:flex;align-items:center;justify-content:center;min-height:150px;padding:28px;text-align:center;border:1px dashed #753044;border-radius:16px;background:linear-gradient(125deg,#171014,#100b0d);color:#d5c2c8;grid-column:1/-1}
+.menu-btn,.mobile-menu-toggle,.theme-toggle{background:#25131b!important;color:#fff!important;border-color:#922039!important}
+.site-popup{background:#1c1116!important;border-color:#90243a!important}
+::selection{background:#ed1027;color:#fff}
+@media(max-width:980px){.nav-links.mobile-open,.links{background:#100b0e!important}}
+@media(max-width:700px){.hero{min-height:490px;background-position:65% center!important}.hero h1{font-size:clamp(2.4rem,11vw,4rem)}.page-head{margin:20px 0;padding:30px 22px!important}.site-footer{padding-top:30px}}
+
+/* Grille administration : produits sans disponibilité */
+#vehicle-form > .two {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 16px;align-items:end}
+#vehicle-form > .two .field {margin-bottom:0}
+#vehicle-form > .two .price-field {grid-column:1 / -1}
+#vehicle-form > .two input[type="hidden"] {display:none}
+@media(max-width:650px){#vehicle-form > .two{grid-template-columns:minmax(0,1fr)}#vehicle-form > .two .price-field{grid-column:1}}
+
+/* AMMU-NATION NORD — FOND CINEMATIQUE PARTAGE SUR TOUTES LES PAGES */
+:root { --bg:#080607; --white:#140d10; --ink:#f9f5f6; --muted:#cbb9bf; --line:#5a1828; }
+html { min-height:100%; background:#070506 !important; }
+body { position:relative; isolation:isolate; min-height:100vh; background:#070506 !important; color:#f9f5f6 !important; }
+body::before { content:""; position:fixed; z-index:-2; inset:0; pointer-events:none; background:linear-gradient(90deg,rgba(0,0,0,.84),rgba(11,2,5,.57) 46%,rgba(0,0,0,.74)),url('../img/armurerie-rouge.jpg') center center/cover no-repeat; }
+body::after { content:""; position:fixed; z-index:-1; inset:0; pointer-events:none; background:radial-gradient(ellipse at 78% 20%,rgba(176,10,34,.17),transparent 55%),linear-gradient(0deg,rgba(0,0,0,.46),transparent 45%); }
+body > main, body > main.container, main.container, main, .section, .section:nth-of-type(odd), .section[style*="background"], section[style*="background"] { background:transparent !important; }
+body[data-page="home"] .hero { background:linear-gradient(90deg,rgba(0,0,0,.92),rgba(15,2,5,.7) 55%,rgba(0,0,0,.24)),url('../img/armurerie-rouge.jpg') center/cover no-repeat !important; }
+.page-head, .image-page-head { background:linear-gradient(95deg,rgba(10,5,7,.98),rgba(33,4,13,.87)),url('../img/armurerie-rouge.jpg') center 42%/cover no-repeat !important; border:1px solid #9c1530 !important; border-left:4px solid #f01436 !important; box-shadow:0 14px 40px #000b !important; }
+.panel,.card,.filters,.vehicle-card,.stat,.vehicle-modal-dialog,.site-popup { background:rgba(16,9,12,.94) !important; backdrop-filter:blur(8px); border-color:#672034 !important; }
+.site-header,.topbar,#header { background:rgba(5,4,5,.97) !important; }
+.site-footer,.footer,#footer { background:rgba(4,3,4,.97) !important; }
+input,select,textarea { background:#1b1015 !important; color:#fff !important; }
+@media(max-width:700px) { body::before { background-position:62% center; } .page-head,.image-page-head { padding:30px 22px !important; } }
+
+/* Présentation de l'association */
+.association-panel{max-width:100%;padding:clamp(22px,4vw,46px);background:rgba(16,9,12,.94);border:1px solid rgba(244,30,61,.35);border-radius:18px;}
+.association-content{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.85;color:#f1e7e9;font-size:1.05rem;}
+#association-text{width:100%;min-height:260px;resize:vertical;white-space:pre-wrap;}
+
+/* Administration : ergonomie et fluidité (sans modifier l'API) */
+body[data-page="admin"] .admin-workspace { min-width:0; }
+body[data-page="admin"] .admin-tabs { position:sticky;top:68px;z-index:20;display:flex;flex-wrap:nowrap;gap:9px;overflow-x:auto;scrollbar-width:thin;background:rgba(10,8,10,.95)!important;backdrop-filter:blur(16px);padding:13px 8px 15px;margin:18px 0 24px;border:1px solid rgba(237,16,39,.2)!important;border-radius:14px;box-shadow:0 12px 35px rgba(0,0,0,.2); }
+body[data-page="admin"] .admin-tabs button { white-space:nowrap;flex:0 0 auto;min-height:42px;border-radius:9px!important;transition:background-color .18s ease,transform .18s ease,border-color .18s ease; }
+body[data-page="admin"] .admin-tabs button:hover {transform:translateY(-1px);}
+body[data-page="admin"] .admin-tabs button:focus-visible,body[data-page="admin"] input:focus-visible,body[data-page="admin"] select:focus-visible,body[data-page="admin"] textarea:focus-visible {outline:2px solid #ff344c!important;outline-offset:2px;}
+body[data-page="admin"] [data-pane]:not(.hidden) {animation:adminAppear .22s ease both;}
+@keyframes adminAppear {from{opacity:.55;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+body[data-page="admin"] .admin-overview {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;}
+body[data-page="admin"] .admin-overview .stat {border:1px solid rgba(237,16,39,.22)!important;border-radius:14px;background:rgba(22,12,15,.9)!important;padding:18px;}
+body[data-page="admin"] [data-pane]>.panel {border-radius:16px!important;box-shadow:0 10px 35px rgba(0,0,0,.16);}
+body[data-page="admin"] .field {min-width:0;}
+body[data-page="admin"] input:not([type="checkbox"]):not([type="range"]),body[data-page="admin"] select,body[data-page="admin"] textarea {max-width:100%;transition:border-color .18s ease,box-shadow .18s ease;}
+body[data-page="admin"] input:focus,body[data-page="admin"] select:focus,body[data-page="admin"] textarea:focus {border-color:#e51b37!important;box-shadow:0 0 0 3px rgba(229,27,55,.12)!important;}
+body[data-page="admin"] .table-wrap {overflow-x:auto;border-radius:12px;}
+body[data-page="admin"] .data-table tbody tr {transition:background-color .15s ease;}
+body[data-page="admin"] .btn {transition:transform .16s ease,filter .16s ease;}
+body[data-page="admin"] .btn:hover {filter:brightness(1.08);transform:translateY(-1px);}
+@media(max-width:760px){body[data-page="admin"] .admin-tabs {top:56px;}body[data-page="admin"] .panel{padding:16px!important;}body[data-page="admin"] .two {grid-template-columns:1fr!important;}body[data-page="admin"] .admin-tabs button {min-height:44px;}}
+@media(prefers-reduced-motion:reduce){body[data-page="admin"] [data-pane]:not(.hidden){animation:none;}body[data-page="admin"] .btn,body[data-page="admin"] .admin-tabs button{transition:none;}}
+
+/* Administration : limiter les recalculs et supprimer les transitions coûteuses */
+body[data-page="admin"] [data-pane].hidden{display:none!important}
+body[data-page="admin"] .admin-tabs button{transition:background-color .12s ease,color .12s ease,border-color .12s ease!important}
+body[data-page="admin"] [data-pane]{animation:none!important;transform:none!important;filter:none!important}
+body[data-page="admin"] .admin-tabs{overscroll-behavior-x:contain}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
+
+/* Fond uni uniquement sur la page Administration */
+body[data-page="admin"] { background:#0b0b0e !important; background-image:none !important; }
+body[data-page="admin"]::before,body[data-page="admin"]::after { content:none !important; display:none !important; background:none !important; }
+body[data-page="admin"] .page-head,body[data-page="admin"] .image-page-head { background:#151216 !important; background-image:none !important; }
+body[data-page="admin"] .panel,body[data-page="admin"] .card,body[data-page="admin"] .stat { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+body[data-page="admin"] .admin-tabs { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
