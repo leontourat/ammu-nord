@@ -74,6 +74,7 @@
        Catégories
       </button>
 
+<button data-tab="team">Équipe</button>
 <button data-tab="association">Association</button>
 <button data-tab="appearance">
        Apparence
@@ -289,6 +290,16 @@
 </div>
 </div>
 </section>
+<section data-pane="team" class="hidden">
+<div class="panel"><h2>Gestion de notre équipe</h2><p class="muted">Ajoutez, modifiez ou supprimez les membres affichés sur la page Notre équipe.</p>
+<form id="team-form"><input type="hidden" id="team-index" value=""/>
+<div class="two"><div class="field"><label for="team-first">Prénom *</label><input id="team-first" maxlength="80" required/></div><div class="field"><label for="team-last">Nom *</label><input id="team-last" maxlength="80" required/></div></div>
+<div class="field"><label for="team-rank">Grade *</label><select id="team-rank" required><option value="">Choisir un grade</option><option>Patron</option><option>Co Patron</option><option>Manager</option><option>Employé</option></select></div>
+<div class="field"><label for="team-image">Photo (facultative)</label><input type="file" id="team-image-file" accept="image/png,image/jpeg,image/webp"/><input id="team-image" type="url" placeholder="URL de la photo (facultatif)"/><small id="team-image-status" class="muted">Vous pouvez choisir une image sur votre appareil.</small></div>
+<div class="field"><label for="team-description">Description (facultative)</label><textarea id="team-description" maxlength="2000" rows="4"></textarea></div>
+<div class="actions"><button class="btn" type="submit">Enregistrer le membre</button> <button class="btn outline" type="button" id="team-reset">Annuler</button></div>
+</form></div><div class="panel"><h2>Membres enregistrés</h2><div id="team-admin-list"></div></div>
+</section>
 <section class="hidden" data-pane="association">
  <div class="panel"><h2>Présentation de l’association</h2>
  <p class="muted">Ce texte apparaît sur la page publique Association. Vous pouvez le modifier à tout moment.</p>
@@ -336,6 +347,9 @@
 <input id="a-news" placeholder="https://.../actualites.jpg" type="url"/>
 <img alt="Aperçu des événements" class="appearance-preview" id="preview-news"/>
 </div>
+<div class="field"><label for="a-association">Bannière Association</label><input id="a-association" type="url" placeholder="https://.../banniere-association.webp"/><img alt="Aperçu Association" class="appearance-preview" id="preview-association"/></div>
+<div class="field"><label for="a-team">Bannière Notre équipe</label><input id="a-team" type="url" placeholder="https://.../banniere-team.webp"/><img alt="Aperçu Notre équipe" class="appearance-preview" id="preview-team"/></div>
+<div class="field"><label for="a-contact">Bannière Contact</label><input id="a-contact" type="url" placeholder="https://.../banniere-contact.webp"/><img alt="Aperçu Contact" class="appearance-preview" id="preview-contact"/></div>
 </div>
 <button class="btn" type="submit">
          Enregistrer les modifications

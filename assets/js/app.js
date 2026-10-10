@@ -28,10 +28,20 @@ function applyAppearance(){
  if(logo){ $$(".brand,.footer-brand").forEach(el=>{el.textContent="";const image=document.createElement("img");image.src=logo;image.alt="Ammu-Nation Nord";image.className="brand-image";el.append(image);}); }
  const hero=siteImage(siteSettings.site_hero_image);
  if(hero && $(".hero")) $(".hero").style.backgroundImage=`linear-gradient(90deg,rgba(2,2,3,.96),rgba(36,0,9,.38)),url("${hero.replace(/\"/g,"%22")}")`;
- const catalogue=siteImage(siteSettings.site_catalogue_image);
- if(catalogue && page==="catalogue" && $(".page-head")) {$(".page-head").classList.add("image-page-head");$(".page-head").style.backgroundImage=`linear-gradient(90deg,rgba(3,2,3,.94),rgba(45,2,14,.56)),url("${catalogue.replace(/\"/g,"%22")}")`;}
- const news=siteImage(siteSettings.site_news_image);
- if(news && page==="news" && $(".page-head")) {$(".page-head").classList.add("image-page-head");$(".page-head").style.backgroundImage=`linear-gradient(90deg,rgba(3,2,3,.94),rgba(45,2,14,.56)),url("${news.replace(/\"/g,"%22")}")`;}
+ const banners={catalogue:"site_catalogue_image",news:"site_news_image",association:"site_association_image",equipe:"site_team_image",contact:"site_contact_image"};
+ const bannerKey=banners[page];
+ const banner=$('.page-head');
+ if(banner && bannerKey){
+   const url=siteImage(siteSettings[bannerKey]);
+   banner.classList.toggle('image-page-head',Boolean(url));
+   if(url){
+     const safeUrl=url.replace(/["\\]/g, c=>encodeURIComponent(c));
+     banner.style.setProperty('background-image',`linear-gradient(90deg,rgba(3,2,3,.88),rgba(45,2,14,.48)),url("${safeUrl}")`,'important');
+   }else{
+     banner.style.removeProperty('background-image');
+   }
+ }
+
 }
 function cropStyle(v){const x=Math.max(0,Math.min(100,Number(v.crop_x??50)||0));const y=Math.max(0,Math.min(100,Number(v.crop_y??50)||0));const z=Math.max(.5,Math.min(3,Number(v.crop_zoom??1)||1));return `transform:translate(${x-50}%,${y-50}%) scale(${z});object-position:center` ;}
 function layout(){
@@ -69,6 +79,34 @@ async function associationPage(){
   target.textContent=value||"La présentation de notre association sera bientôt disponible.";
  }catch(err){target.textContent="Impossible de charger la présentation pour le moment.";notice(err.message,true);}
 }
+let teamMembers=[];
+const teamRanks=["Patron","Co Patron","Manager","Employé"];
+async function teamPage(){
+ const target=$("#team-public-list");if(!target)return;
+ try{
+  const members=await api("/api/team");
+  if(!members.length){target.innerHTML='<div class="panel"><p>Notre équipe sera prochainement présentée.</p></div>';return;}
+  const card=m=>`<article class="team-tree-card">${m.image_url?`<img src="${esc(m.image_url)}" alt="" loading="lazy" class="team-tree-photo">`:`<div class="team-tree-placeholder" aria-hidden="true">👤</div>`}<div class="team-tree-content"><h2>${esc(m.first_name)} ${esc(m.last_name)}</h2><strong>${esc(m.rank)}</strong>${m.description?`<p>${esc(m.description)}</p>`:""}</div></article>`;
+  target.innerHTML=teamRanks.map((rank,i)=>{const group=members.filter(m=>(m.rank||"").toLowerCase()==rank.toLowerCase()||(rank==="Employé"&&(m.rank||"").toLowerCase()==="employé"));return group.length?`<section class="team-tree-level" aria-label="${rank}"><div class="team-tree-row">${group.map(card).join("")}</div></section>`:"";}).join("") || '<p>Aucun membre à afficher.</p>';
+ }catch(err){target.innerHTML='<div class="panel">Impossible de charger l’équipe.</div>';notice(err.message,true);}
+}
+function renderTeamAdmin(){
+ const target=$("#team-admin-list");if(!target)return;
+ if(!teamMembers.length){target.innerHTML='<div class="team-admin-empty"><span aria-hidden="true">♙</span><strong>Aucun membre enregistré</strong><p>Ajoutez votre premier membre avec le formulaire ci-dessus.</p></div>';return;}
+ target.innerHTML=`<div class="team-admin-summary">${teamMembers.length} membre${teamMembers.length>1?'s':''} enregistré${teamMembers.length>1?'s':''}</div><div class="team-admin-grid">${teamMembers.map((m,i)=>{
+ const initials=((m.first_name||'').charAt(0)+(m.last_name||'').charAt(0)).toUpperCase();
+ return `<article class="team-admin-card"><div class="team-admin-card-top"><div class="team-admin-avatar">${m.image_url?`<img src="${esc(m.image_url)}" alt="Photo de ${esc(m.first_name)} ${esc(m.last_name)}" loading="lazy">`:`<span aria-hidden="true">${esc(initials||'•')}</span>`}</div><div class="team-admin-person"><h3>${esc(m.first_name)} ${esc(m.last_name)}</h3><span class="team-admin-rank">${esc(m.rank)}</span></div></div><div class="team-admin-description">${m.description?`<p>${esc(m.description)}</p>`:'<p class="team-admin-no-description">Aucune description</p>'}</div><div class="team-admin-actions"><button type="button" class="btn outline small" data-edit-team="${i}">Modifier</button><button type="button" class="btn outline small team-admin-delete" data-delete-team="${i}">Supprimer</button></div></article>`;
+ }).join('')}</div>`;
+}
+async function loadTeamEditor(){
+ if(!$("#team-admin-list"))return;
+ teamMembers=await api("/api/team");renderTeamAdmin();
+}
+async function saveTeamMembers(next){
+ await api("/api/admin/team",{method:"PUT",auth:true,body:{members:next}});
+ teamMembers=next;renderTeamAdmin();
+}
+function resetTeamForm(){["team-index","team-first","team-last","team-rank","team-description","team-image"].forEach(id=>$("#"+id).value="");}
 function vehicleCard(v){
  const name=esc(v.brand+" "+v.model);
  return `<article class="card vehicle-card vehicle-card-simple">
@@ -211,7 +249,7 @@ function initVehicleUpload(){
 function resetVehicle(){$("#vehicle-form").reset();$("#v-brand").value="Ammu-Nation Nord";$("#v-id").value="";$("#v-crop-x").value=50;$("#v-crop-y").value=50;$("#v-crop-zoom").value=1;updateCropPreview();$("#vehicle-form-title").textContent="Ajouter un produit";}
 function resetNews(){$("#news-form").reset();$("#n-id").value="";$("#news-form-title").textContent="Ajouter une événement";}
 function refreshAppearanceForm(){
- const mapping={"a-logo":"site_logo_image","a-hero":"site_hero_image","a-catalogue":"site_catalogue_image","a-news":"site_news_image"};
+ const mapping={"a-logo":"site_logo_image","a-hero":"site_hero_image","a-catalogue":"site_catalogue_image","a-news":"site_news_image","a-association":"site_association_image","a-team":"site_team_image","a-contact":"site_contact_image"};
  for(const [id,key] of Object.entries(mapping)){
    $("#"+id).value=siteSettings[key]||"";
    const preview=$("#preview-"+id.slice(2));
@@ -223,7 +261,7 @@ async function adminPage(){
   const result=await api("/api/admin/login",{method:"POST",body:{code:$("#admin-code").value}});
   sessionStorage.setItem("ammu_admin_token",result.token);$("#admin-code").value="";
   setLogged(true);notice("");refreshAppearanceForm();
-  await Promise.allSettled([refreshAdmin(),loadAssociationEditor()]);
+  await Promise.allSettled([refreshAdmin(),loadAssociationEditor(),loadTeamEditor()]);
  }catch(err){notice(err.message,true);}};
  $("#logout").onclick=async()=>{try{await api("/api/admin/logout",{method:"POST",auth:true});}catch{}sessionStorage.removeItem("ammu_admin_token");setLogged(false);notice("Déconnecté.");};
  
@@ -234,7 +272,33 @@ async function adminPage(){
    notice("Présentation de l’association enregistrée.");
   }catch(err){notice(err.message,true);}
  };
- // Navigation administrateur fluide, accessible et persistante pendant la session.
+ $("#team-form").onsubmit=async e=>{
+  e.preventDefault();const idx=$("#team-index").value;
+  const member={first_name:$("#team-first").value.trim(),last_name:$("#team-last").value.trim(),rank:$("#team-rank").value.trim(),description:$("#team-description").value.trim(),image_url:$("#team-image").value.trim()};
+  if(!member.first_name||!member.last_name||!member.rank)return notice("Le prénom, le nom et le grade sont obligatoires.",true);
+  const next=[...teamMembers];if(idx==="")next.push(member);else next[Number(idx)]=member;
+  try{await saveTeamMembers(next);resetTeamForm();notice("Membre enregistré.");}catch(err){notice(err.message,true);}
+ };
+ $("#team-image-file").addEventListener("change",async e=>{
+  const file=e.target.files?.[0];if(!file)return;
+  const status=$("#team-image-status");status.textContent="Envoi de la photo…";
+  try{
+   if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw Error("Format JPG, PNG ou WebP requis.");
+   const headers={"Content-Type":file.type};const t=token();if(t)headers.Authorization="Bearer "+t;
+   const response=await fetch(API+"/api/admin/upload-vehicle-image",{method:"POST",headers,body:file});
+   const data=await response.json();if(!response.ok)throw Error(data.error||"Envoi impossible");
+   $("#team-image").value=data.url||data.image_url||"";
+   if(!$("#team-image").value)throw Error("URL non reçue du serveur");
+   status.textContent="Photo envoyée. Enregistrez le membre.";
+  }catch(err){status.textContent=err.message;notice(err.message,true);}finally{e.target.value="";}
+ });
+ $("#team-reset").onclick=resetTeamForm;
+ $("#team-admin-list").onclick=async e=>{
+  const btn=e.target.closest("button");if(!btn)return;
+  if(btn.dataset.editTeam!==undefined){const i=Number(btn.dataset.editTeam),m=teamMembers[i];if(!m)return;$("#team-index").value=i;$("#team-first").value=m.first_name;$("#team-last").value=m.last_name;$("#team-rank").value=m.rank;$("#team-description").value=m.description||"";$("#team-image").value=m.image_url||"";$("#team-form").scrollIntoView({behavior:"smooth"});}
+  if(btn.dataset.deleteTeam!==undefined){const i=Number(btn.dataset.deleteTeam);if(!confirm("Supprimer ce membre de l’équipe ?"))return;try{await saveTeamMembers(teamMembers.filter((_,j)=>i!==j));notice("Membre supprimé.");}catch(err){notice(err.message,true);}}
+ };
+ // Navigation administrateur fluide // Navigation administrateur fluide, accessible et persistante pendant la session.
  const adminTabs=$$(".admin-tabs button");
  const adminPanes=$$("[data-pane]");
  function activateAdminTab(name){
@@ -246,7 +310,7 @@ async function adminPage(){
  }
  adminTabs.forEach((b,i)=>{b.onclick=()=>activateAdminTab(b.dataset.tab);b.onkeydown=e=>{if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;e.preventDefault();const next=adminTabs[(i+(e.key==="ArrowRight"?1:-1)+adminTabs.length)%adminTabs.length];activateAdminTab(next.dataset.tab);next.focus();};});
  activateAdminTab(sessionStorage.getItem("ammu_admin_tab")||"vehicles");
- if(token()){try{await api("/api/admin/me",{auth:true});setLogged(true);refreshAppearanceForm();await Promise.allSettled([refreshAdmin(),loadAssociationEditor()]);}catch{sessionStorage.removeItem("ammu_admin_token");setLogged(false);}}
+ if(token()){try{await api("/api/admin/me",{auth:true});setLogged(true);refreshAppearanceForm();await Promise.allSettled([refreshAdmin(),loadAssociationEditor(),loadTeamEditor()]);}catch{sessionStorage.removeItem("ammu_admin_token");setLogged(false);}}
  $("#category-form").onsubmit=async e=>{
   e.preventDefault();const id=$("#cat-id").value;
   try{await api("/api/admin/categories"+(id?"/"+id:""),{method:id?"PUT":"POST",auth:true,body:{name:$("#cat-name").value}});$("#cat-id").value="";$("#cat-name").value="";await refreshCategories();notice("Catégorie enregistrée.");}catch(err){notice(err.message,true);}
@@ -258,10 +322,10 @@ async function adminPage(){
   if(b.dataset.delCat){if(!confirm("Supprimer cette catégorie ?"))return;try{await api("/api/admin/categories/"+b.dataset.delCat,{method:"DELETE",auth:true});await refreshCategories();notice("Catégorie supprimée.");}catch(err){notice(err.message,true);}}
  };
  $("#appearance-form").onsubmit=async e=>{
-  e.preventDefault();const body={site_logo_image:$("#a-logo").value.trim(),site_hero_image:$("#a-hero").value.trim(),site_catalogue_image:$("#a-catalogue").value.trim(),site_news_image:$("#a-news").value.trim()};
+  e.preventDefault();const body={site_logo_image:$("#a-logo").value.trim(),site_hero_image:$("#a-hero").value.trim(),site_catalogue_image:$("#a-catalogue").value.trim(),site_news_image:$("#a-news").value.trim(),site_association_image:$("#a-association").value.trim(),site_team_image:$("#a-team").value.trim(),site_contact_image:$("#a-contact").value.trim()};
   try{await api("/api/admin/site-settings",{method:"PUT",auth:true,body});siteSettings=body;refreshAppearanceForm();applyAppearance();notice("Apparence du site enregistrée.");}catch(err){notice(err.message,true);}
  };
- ["logo","hero","catalogue","news"].forEach(k=>$("#a-"+k).addEventListener("input",()=>{$("#preview-"+k).src=siteImage($("#a-"+k).value)||"assets/img/showroom.svg";}));
+ ["logo","hero","catalogue","news","association","team","contact"].forEach(k=>$("#a-"+k).addEventListener("input",()=>{$("#preview-"+k).src=siteImage($("#a-"+k).value)||"assets/img/showroom.svg";}));
 
  ["v-image-url","v-crop-x","v-crop-y","v-crop-zoom"].forEach(id=>$("#"+id).addEventListener("input",updateCropPreview));
  const cropArea=$("#v-crop-area");let drag=null;
@@ -288,5 +352,5 @@ async function adminPage(){
   if(id=b.dataset.delN){if(!confirm("Supprimer cette événement ?"))return;try{await api("/api/admin/news/"+id,{auth:true,method:"DELETE"});await refreshAdmin();}catch(err){notice(err.message,true);}}
  });
 }
-document.addEventListener("DOMContentLoaded",async()=>{layout();try{if(page==="admin"){adminPage();api("/api/site-settings").then(v=>{siteSettings=v;applyAppearance();refreshAppearanceForm();}).catch(()=>{});}else{siteSettings=await api("/api/site-settings");applyAppearance();if(page==="association")await associationPage();else await publicPage();}}catch(err){notice(err.message,true);}});
+document.addEventListener("DOMContentLoaded",async()=>{layout();try{if(page==="admin"){adminPage();api("/api/site-settings").then(v=>{siteSettings=v;applyAppearance();refreshAppearanceForm();}).catch(()=>{});}else{siteSettings=await api("/api/site-settings");applyAppearance();if(page==="association")await associationPage();else if(page==="equipe")await teamPage();else await publicPage();}}catch(err){notice(err.message,true);}});
 })();

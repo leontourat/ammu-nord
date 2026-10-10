@@ -410,7 +410,7 @@ body[data-page="home"]>main{padding-bottom:0}
 .nav-links a:hover,.nav-links a.is-active:not(.nav-admin),.nav-links a.active,.links a.active,.links a:hover{background:#ed1027!important;color:white!important}
 .nav-links a.nav-admin{background:#140b0e!important;border:1px solid #ae1428!important;color:#fff!important}
 .nav-links a.nav-admin:hover,.nav-links a.nav-admin.is-active{background:#d20c25!important}
-.hero{min-height:560px;background:linear-gradient(90deg,#020203 0%,rgba(3,2,3,.97) 24%,rgba(17,3,7,.78) 52%,rgba(15,0,3,.20) 100%),url('../img/armurerie-rouge.jpg') center/cover no-repeat!important;border-bottom:1px solid #d8122a}
+.hero{min-height:560px;background:linear-gradient(90deg,#020203 0%,rgba(3,2,3,.97) 24%,rgba(17,3,7,.78) 52%,rgba(15,0,3,.20) 100%),url('../img/armurerie-rouge.webp') center/cover no-repeat!important;border-bottom:1px solid #d8122a}
 .hero::after{background:linear-gradient(0deg,rgba(0,0,0,.32),transparent 45%)}
 .hero h1{font-weight:900;max-width:820px;text-shadow:0 5px 24px #000}
 .hero h1 em,.section h2 em{font-style:normal;color:#ff1c36}
@@ -475,11 +475,11 @@ body[data-page="catalogue"] #vehicle-grid:empty::after{content:"Le catalogue ser
 :root { --bg:#080607; --white:#140d10; --ink:#f9f5f6; --muted:#cbb9bf; --line:#5a1828; }
 html { min-height:100%; background:#070506 !important; }
 body { position:relative; isolation:isolate; min-height:100vh; background:#070506 !important; color:#f9f5f6 !important; }
-body::before { content:""; position:fixed; z-index:-2; inset:0; pointer-events:none; background:linear-gradient(90deg,rgba(0,0,0,.84),rgba(11,2,5,.57) 46%,rgba(0,0,0,.74)),url('../img/armurerie-rouge.jpg') center center/cover no-repeat; }
+body::before { content:""; position:fixed; z-index:-2; inset:0; pointer-events:none; background:linear-gradient(90deg,rgba(0,0,0,.84),rgba(11,2,5,.57) 46%,rgba(0,0,0,.74)),url('../img/armurerie-rouge.webp') center center/cover no-repeat; }
 body::after { content:""; position:fixed; z-index:-1; inset:0; pointer-events:none; background:radial-gradient(ellipse at 78% 20%,rgba(176,10,34,.17),transparent 55%),linear-gradient(0deg,rgba(0,0,0,.46),transparent 45%); }
 body > main, body > main.container, main.container, main, .section, .section:nth-of-type(odd), .section[style*="background"], section[style*="background"] { background:transparent !important; }
-body[data-page="home"] .hero { background:linear-gradient(90deg,rgba(0,0,0,.92),rgba(15,2,5,.7) 55%,rgba(0,0,0,.24)),url('../img/armurerie-rouge.jpg') center/cover no-repeat !important; }
-.page-head, .image-page-head { background:linear-gradient(95deg,rgba(10,5,7,.98),rgba(33,4,13,.87)),url('../img/armurerie-rouge.jpg') center 42%/cover no-repeat !important; border:1px solid #9c1530 !important; border-left:4px solid #f01436 !important; box-shadow:0 14px 40px #000b !important; }
+body[data-page="home"] .hero { background:linear-gradient(90deg,rgba(0,0,0,.92),rgba(15,2,5,.7) 55%,rgba(0,0,0,.24)),url('../img/armurerie-rouge.webp') center/cover no-repeat !important; }
+.page-head, .image-page-head { background:linear-gradient(95deg,rgba(10,5,7,.98),rgba(33,4,13,.87)),url('../img/armurerie-rouge.webp') center 42%/cover no-repeat !important; border:1px solid #9c1530 !important; border-left:4px solid #f01436 !important; box-shadow:0 14px 40px #000b !important; }
 .panel,.card,.filters,.vehicle-card,.stat,.vehicle-modal-dialog,.site-popup { background:rgba(16,9,12,.94) !important; backdrop-filter:blur(8px); border-color:#672034 !important; }
 .site-header,.topbar,#header { background:rgba(5,4,5,.97) !important; }
 .site-footer,.footer,#footer { background:rgba(4,3,4,.97) !important; }
@@ -525,3 +525,94 @@ body[data-page="admin"]::before,body[data-page="admin"]::after { content:none !i
 body[data-page="admin"] .page-head,body[data-page="admin"] .image-page-head { background:#151216 !important; background-image:none !important; }
 body[data-page="admin"] .panel,body[data-page="admin"] .card,body[data-page="admin"] .stat { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
 body[data-page="admin"] .admin-tabs { backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+
+
+/* OPTIMISATION 2026-10 : image unique, sans calques fixes ni flou GPU */
+html { background-color: #09090b; }
+body:not([data-page="admin"]) {
+  background-color: #09090b !important;
+  background-image: linear-gradient(90deg,rgba(0,0,0,.86),rgba(9,2,5,.62) 48%,rgba(0,0,0,.78)),url('../img/armurerie-rouge.webp') !important;
+  background-repeat: no-repeat !important;
+  background-position: center top !important;
+  background-size: cover !important;
+  background-attachment: scroll !important;
+}
+/* Remove two full-screen fixed layers that triggered expensive repaints on scroll. */
+body::before,body::after { content:none !important; display:none !important; }
+/* Avoid blur on all content cards, sticky header and filters. */
+.topbar,.site-header,.panel,.card,.filters,.vehicle-card,.stat,.vehicle-modal-dialog,.site-popup,.admin-tabs {
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+.topbar,.site-header { background-color:rgba(12,9,11,.98) !important; }
+.panel,.card,.filters,.vehicle-card,.stat,.vehicle-modal-dialog { background-color:rgba(17,12,15,.97) !important; }
+/* Heavy hover zoom/shadows can cause jank on long grids. */
+.vehicle-card .card-image { transition:none !important; }
+.vehicle-card:hover .card-image { transform:none !important; }
+/* Admin remains plain and never downloads the background as a CSS layer. */
+body[data-page="admin"] { background:#0b0b0e !important; background-image:none !important; }
+body[data-page="admin"] .page-head,body[data-page="admin"] .image-page-head { background:#151216 !important; background-image:none !important; }
+/* Mobile: image remains, but no expensive fixed backgrounds. */
+@media(max-width:700px){
+  body:not([data-page="admin"]) { background-size:cover !important; background-position:55% top !important; }
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after { animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+}
+
+/* Bannières administrables : image uniquement dans le bandeau supérieur. */
+body:not([data-page="admin"]) .page-head.image-page-head {
+  background-position:center !important;
+  background-size:cover !important;
+  background-repeat:no-repeat !important;
+  background-attachment:scroll !important;
+}
+
+/* Équipe : fiches légères et responsives */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:18px;margin:22px 0 36px}
+.team-member-card{min-width:0}.team-member-card h2{margin:0 0 10px}.team-member-rank{color:#ff4058;display:block;margin-bottom:12px}.team-member-description{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;line-height:1.6}
+.team-admin-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.12)}.team-admin-row>div:first-child{min-width:0}.team-admin-row span{display:block;color:#ff4058;margin-top:4px}.team-admin-row p{white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0 0}.team-admin-actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:650px){.team-admin-row{align-items:flex-start;flex-direction:column}}
+
+/* Organigramme hiérarchique de l'équipe */
+.team-grid{display:block!important;max-width:1200px;margin:0 auto;padding:20px 0 60px}
+.team-tree-level{position:relative;padding:0 10px 42px;text-align:center}
+.team-tree-level:not(:last-child)::after{content:"";position:absolute;bottom:0;left:50%;height:42px;width:2px;background:#df1738}
+.team-tree-level:not(:first-child)::before{content:"";position:absolute;top:-42px;left:50%;height:42px;width:2px;background:#df1738}
+.team-tree-row{display:flex;justify-content:center;align-items:stretch;flex-wrap:wrap;gap:20px}
+.team-tree-card{width:240px;max-width:100%;overflow:hidden;background:#100e12;border:1px solid #8d1931;border-radius:16px;color:white;text-align:center;box-shadow:0 10px 28px #0005}
+.team-tree-photo{display:block;width:100%;height:170px;object-fit:cover}
+.team-tree-placeholder{height:140px;display:flex;align-items:center;justify-content:center;font-size:48px;background:#211018}
+.team-tree-content{padding:18px 14px 20px}
+.team-tree-content h2{font-size:19px;margin:0 0 8px}
+.team-tree-content strong{color:#ff3558;display:block;font-size:14px}
+.team-tree-content p{font-size:14px;line-height:1.5;overflow-wrap:anywhere;margin:12px 0 0}
+.team-admin-thumb{width:48px;height:48px;object-fit:cover;border-radius:9px;margin-right:12px;vertical-align:middle}
+@media(max-width:600px){.team-tree-card{width:min(100%,300px)}.team-tree-row{gap:12px}.team-tree-level{padding-bottom:32px}.team-tree-level:not(:last-child)::after{height:32px}.team-tree-level:not(:first-child)::before{top:-32px;height:32px}}
+
+/* Cartes des membres dans l'administration */
+#team-admin-list{margin-top:20px}
+.team-admin-summary{font-size:.87rem;color:#aaa3aa;margin-bottom:15px}
+.team-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:16px;align-items:stretch}
+.team-admin-card{display:flex;flex-direction:column;min-width:0;padding:20px;border:1px solid rgba(220,44,69,.38);border-radius:16px;background:#161216;box-shadow:0 5px 18px rgba(0,0,0,.15);transition:border-color .15s ease}
+.team-admin-card:hover{border-color:rgba(244,49,76,.72)}
+.team-admin-card-top{display:flex;align-items:center;gap:15px;min-width:0}
+.team-admin-avatar{width:74px;height:74px;flex:0 0 74px;border-radius:13px;overflow:hidden;background:#282025;border:1px solid rgba(255,255,255,.1);display:grid;place-items:center}
+.team-admin-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.team-admin-avatar span{font-weight:800;font-size:1.4rem;color:#f6d3d9}
+.team-admin-person{min-width:0}
+.team-admin-person h3{font-size:1.12rem;margin:0 0 9px;overflow-wrap:anywhere;color:#fff}
+.team-admin-rank{display:inline-block!important;margin:0!important;padding:5px 10px;border-radius:7px;background:rgba(230,35,63,.14);border:1px solid rgba(230,35,63,.36);color:#ff6377!important;font-size:.77rem;font-weight:700}
+.team-admin-description{flex:1;min-height:54px;margin:18px 0 15px;color:#cfc8cb;font-size:.91rem;line-height:1.5;overflow-wrap:anywhere}
+.team-admin-description p{margin:0;white-space:pre-wrap}
+.team-admin-no-description{color:#80777d;font-style:italic}
+.team-admin-card .team-admin-actions{display:flex;gap:10px;border-top:1px solid rgba(255,255,255,.1);padding-top:15px}
+.team-admin-card .team-admin-actions .btn{flex:1;justify-content:center;text-align:center;margin:0;min-width:0}
+.team-admin-card .team-admin-delete{border-color:rgba(244,49,76,.65);color:#ff7c8d}
+.team-admin-empty{text-align:center;padding:32px 12px;color:#a99fa5;border:1px dashed rgba(255,255,255,.16);border-radius:14px}
+.team-admin-empty span{display:block;font-size:2rem;margin-bottom:8px}
+.team-admin-empty strong{display:block;color:#fff}
+.team-admin-empty p{margin:8px 0 0}
+@media(max-width:480px){.team-admin-card{padding:16px}.team-admin-avatar{width:62px;height:62px;flex-basis:62px}}
+
+/* Espacement entre le formulaire Équipe et les membres enregistrés */
+body[data-page="admin"] [data-pane="team"] > .panel + .panel { margin-top: 28px !important; }
